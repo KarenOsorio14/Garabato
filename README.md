@@ -43,7 +43,7 @@ Se compararon los modelos vistos en el curso, de lo más simple a lo más comple
 | SVM lineal / RBF / polinomial (con PCA) | píxeles sueltos | 0,60 / 0,74 / 0,73 |
 | Random Forest | píxeles sueltos | 0,62 |
 | ANN (red densa) | píxeles sueltos | 0,78 |
-| **CNN** ⭐ | formas en la imagen | **0,91** |
+| **CNN**  | formas en la imagen | **0,91** |
 | MobileNetV2 (transfer learning + fine-tuning) | formas, con lo aprendido de fotos | 0,89 |
 | RNN simple | el trazo como secuencia | 0,27 |
 | LSTM | el trazo como secuencia | 0,90 |
