@@ -1,4 +1,4 @@
-# Garabato ✏️
+# Garabato
 
 **Aprende inglés dibujando.** Garabato te muestra una palabra en inglés, tú la dibujas y una red neuronal intenta reconocer tu dibujo. No tienes que dibujar bien: un garabato basta.
 
