@@ -363,12 +363,12 @@ def pantalla_inicio():
         st.markdown('<p class="bajada">No tienes que dibujar bien:<br>un <mark>garabato</mark> basta.</p>', unsafe_allow_html=True)
         st.button("Empezar", key="empezar", type="primary", on_click=ir, args=("temas",))
         if st.button("¿Qué es Garabato?", key="ver_info"):
-            s.ver_info = not s.get("ver_info", False)
+            s.mostrar_info = not s.get("mostrar_info", False)
     with der:
         with st.container(key="columna_gato"):
             st.markdown(f'<div class="gato-portada">{figura}</div>', unsafe_allow_html=True)
 
-    if s.get("ver_info"):
+    if s.get("mostrar_info"):
         st.markdown(f"""<div class="info">
           <p><b>Por qué dibujar:</b> hay evidencia de que dibujar una palabra ayuda a recordarla mejor que escribirla
           (<i>efecto del dibujo</i>, Wammes, Meade y Fernandes, 2016).</p>
