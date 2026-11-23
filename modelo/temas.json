@@ -1,0 +1,52 @@
+{
+  "Frutas y comida": [
+    "apple",
+    "pear",
+    "banana",
+    "strawberry",
+    "watermelon",
+    "grapes",
+    "ice cream",
+    "pizza"
+  ],
+  "Animales": [
+    "cat",
+    "dog",
+    "rabbit",
+    "bird",
+    "butterfly",
+    "fish",
+    "snake",
+    "cow",
+    "frog",
+    "elephant"
+  ],
+  "Casa y objetos": [
+    "house",
+    "umbrella",
+    "guitar",
+    "chair",
+    "cup",
+    "clock",
+    "book",
+    "key"
+  ],
+  "Naturaleza": [
+    "tree",
+    "flower",
+    "sun",
+    "moon",
+    "cloud",
+    "rainbow",
+    "mountain"
+  ],
+  "Transporte": [
+    "car",
+    "bicycle",
+    "bus",
+    "airplane",
+    "sailboat",
+    "train",
+    "truck"
+  ]
+}
