@@ -1,0 +1,6 @@
+# Usa la MISMA versión de TensorFlow con la que entrenaste (está en modelo/config.json)
+tensorflow==2.21.0
+streamlit==1.66.1
+streamlit-drawable-canvas==0.13.0
+numpy
+pillow

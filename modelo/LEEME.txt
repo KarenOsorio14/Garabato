@@ -1,0 +1,5 @@
+Pon aquí los archivos que genera el Paso 2 (Drive: proyecto_dibujos/modelo_app/):
+- modelo_dibujos.keras
+- palabras.json
+- temas.json
+- config.json
