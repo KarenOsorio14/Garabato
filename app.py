@@ -219,9 +219,25 @@ def borrar():
     s.lienzo += 1
 
 
+@st.cache_data
+def imagen_nitida(nombre, ancho):
+    # st.image reduce la imagen al ancho exacto y en celular se ve borrosa;
+    # aquí se guarda a 3 veces el ancho para pantallas de alta densidad.
+    import base64, io
+    from PIL import Image
+    im = Image.open(IMG / nombre)
+    lado = min(im.width, ancho * 3)
+    im = im.resize((lado, round(im.height * lado / im.width)), Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, format="PNG", optimize=True)
+    return base64.b64encode(buf.getvalue()).decode()
+
+
 def imagen(nombre, ancho):
-    ruta = IMG / nombre
-    st.image(str(ruta if ruta.exists() else IMG / "gato_hola.png"), width=ancho)
+    if not (IMG / nombre).exists():
+        nombre = "gato_hola.png"
+    st.markdown(f'<div style="text-align:center; margin-bottom:0.9rem"><img src="data:image/png;base64,{imagen_nitida(nombre, ancho)}" '
+                f'style="width:{ancho}px; max-width:100%; height:auto" alt=""></div>', unsafe_allow_html=True)
 
 
 def centrado(nombre, ancho):
