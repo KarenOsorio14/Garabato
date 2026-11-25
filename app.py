@@ -21,7 +21,8 @@ IMG = RAIZ / "imagenes"
 
 st.set_page_config(page_title="Garabato", page_icon=str(IMG / "gato_hola.png"), layout="centered")
 
-CRAYONES = {"tinta": "#2B2B2B", "azul": "#2F5FA8", "verde": "#3B8C5A", "naranja": "#E8892B", "rosa": "#E07A9E"}
+CRAYONES = {"tinta": "#2B2B2B", "rojo": "#D64545", "naranja": "#E8892B", "amarillo": "#F2C230", "verde": "#3B8C5A",
+            "azul": "#2F5FA8", "morado": "#7B5EA7", "rosa": "#E07A9E", "cafe": "#8B5A3C"}
 IMAGEN_TEMA = {
     "Frutas y comida": "tema_frutas_y_comida.png", "Animales": "tema_animales.png",
     "Casa y objetos": "tema_casa_y_objetos.png", "Naturaleza": "tema_naturaleza.png",
@@ -84,6 +85,13 @@ div[class*="st-key-crayon_"] button { width: 38px; height: 38px; min-height: 0; 
 .st-key-crayon_verde button { background: #3B8C5A !important; }
 .st-key-crayon_naranja button { background: #E8892B !important; }
 .st-key-crayon_rosa button { background: #E07A9E !important; }
+.st-key-crayon_rojo button { background: #D64545 !important; }
+.st-key-crayon_amarillo button { background: #F2C230 !important; }
+.st-key-crayon_morado button { background: #7B5EA7 !important; }
+.st-key-crayon_cafe button { background: #8B5A3C !important; }
+.st-key-crayones { flex-wrap: nowrap !important; gap: 10px !important; }
+.st-key-crayones > div { width: auto !important; min-width: 0 !important; flex: 0 0 auto !important; }
+@media (max-width: 380px) { div[class*="st-key-crayon_"] button { width:26px !important; height:26px !important; } .st-key-crayones { gap: 6px !important; } }
 
 /* imágenes centradas y sin botón de pantalla completa */
 div[data-testid="stFullScreenFrame"] { display: flex; justify-content: center; width: 100%; }
@@ -128,7 +136,7 @@ div[class*="st-key-tema_"] { background:var(--crema); border:1px solid #E4DACC; 
   box-shadow:0 3px 12px rgba(75,57,35,.05); padding:1rem; transition:transform .15s ease, box-shadow .15s ease; }
 div[class*="st-key-tema_"]:hover { transform:translateY(-2px); box-shadow:0 7px 18px rgba(75,57,35,.08); }
 div[class*="st-key-tema_"] button { border-radius:10px; }
-div[class*="st-key-crayon_"] button { width:36px; height:36px; border:2px solid rgba(41,40,36,.14); box-shadow:none; }
+div[class*="st-key-crayon_"] button { width:30px; height:30px; border:2px solid rgba(41,40,36,.14); box-shadow:none; }
 div[class*="st-key-lienzo_"] { border:1px solid #DED3C4; border-radius:16px; box-shadow:0 4px 14px rgba(75,57,35,.06); padding:7px; }
 iframe { border-radius:12px; }
 .globo { border:1px solid #DED3C4; border-radius:16px; padding:1rem 1.2rem; font-size:1.35rem; }
@@ -399,7 +407,7 @@ def pantalla_temas():
     st.markdown('<p class="seccion centro">Elige un tema</p>', unsafe_allow_html=True)
     st.markdown('<p class="miga centro">¿Qué quieres dibujar hoy?</p>', unsafe_allow_html=True)
     st.markdown('<p class="miga centro">Elige un tema y te mostraré palabras en inglés, una por una. '
-                'Tú las dibujas y la IA intenta adivinar qué dibujaste.</p>', unsafe_allow_html=True)
+                'Tú las dibujas y la IA, sin saber qué palabra te tocó, intenta adivinar qué dibujaste.</p>', unsafe_allow_html=True)
     st.write("")
     nombres = list(TEMAS)
     for fila in [nombres[:3], nombres[3:]]:
@@ -465,7 +473,7 @@ def pantalla_dibujar():
         lienzo = st_canvas(stroke_width=6, stroke_color=CRAYONES[s.crayon], background_color="#FFFBF4",
                            height=360, width=360, drawing_mode="freedraw", key=f"canvas_{s.lienzo}")
 
-    with st.container(horizontal=True, horizontal_alignment="center", gap="medium"):
+    with st.container(horizontal=True, horizontal_alignment="center", gap="small", key="crayones"):
         for nombre in CRAYONES:
             st.button(" ", key=f"crayon_{nombre}", on_click=lambda n=nombre: s.update(crayon=n))
     st.markdown(f"<style>.st-key-crayon_{s.crayon} button {{ outline: 3px solid #2F5FA8; outline-offset: 3px; }}</style>",
@@ -504,6 +512,8 @@ def pantalla_resultado():
              "casi": f"¡Casi! A mí me parece: <b>{t}</b> ({PALABRAS[t]}).",
              "duda": "Mmm… no estoy segura de qué es. ¿Lo intentas otra vez?"}[r["tipo"]]
     st.markdown(f'<div class="globo {r["tipo"]}">{texto}</div>', unsafe_allow_html=True)
+    st.markdown('<p class="miga centro">La IA no sabe qué palabra te tocó: solo mira tu dibujo y adivina.</p>',
+                unsafe_allow_html=True)
 
     ultima = s.indice + 1 >= len(s.ronda)
     texto_sig = "Ver resultados" if ultima else "Siguiente palabra"
