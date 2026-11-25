@@ -425,14 +425,14 @@ def pantalla_temas():
 
 
 # ---------------------------------------------------------------- 3. dibujar
-def boton_escuchar(palabra):
+def boton_escuchar(palabra, traduccion):
     # Usa la voz del propio navegador (speechSynthesis): no necesita archivos de audio.
     import json as _json
     import streamlit.components.v1 as components
     components.html(f"""
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
     <style>
-      body {{ margin: 0; display: flex; justify-content: center; background: transparent; }}
+      body {{ margin: 0; display: flex; justify-content: center; gap: 10px; background: transparent; }}
       button {{ font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 15px; color: #2F5FA8;
                background: #FFFBF4; border: 1.5px solid #2F5FA8; border-radius: 999px; padding: 8px 18px;
                display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }}
@@ -444,6 +444,7 @@ def boton_escuchar(palabra):
            <path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg>
       Escuchar
     </button>
+    <button id="p" type="button" aria-label="Ver la traducción">Pista</button>
     <script>
       const palabra = {_json.dumps(palabra)};
       document.getElementById("b").onclick = () => {{
@@ -456,6 +457,8 @@ def boton_escuchar(palabra):
         if (voz) u.voice = voz;
         v.speak(u);
       }};
+      const traduccion = {_json.dumps(traduccion)};
+      document.getElementById("p").onclick = (e) => {{ e.currentTarget.textContent = "Pista: " + traduccion; }};
     </script>""", height=48)
 
 
@@ -466,8 +469,8 @@ def pantalla_dibujar():
     b.button("Salir", use_container_width=True, on_click=ir, args=("temas",))
 
     st.markdown(f"""<div class="tarjeta"><p class="pide">Draw:</p><p class="palabra">{palabra}</p>
-                <p class="trad">({PALABRAS[palabra]})</p></div>""", unsafe_allow_html=True)
-    boton_escuchar(palabra)
+                </div>""", unsafe_allow_html=True)
+    boton_escuchar(palabra, PALABRAS[palabra])
 
     with st.container(key=f"lienzo_{s.lienzo}"):
         lienzo = st_canvas(stroke_width=6, stroke_color=CRAYONES[s.crayon], background_color="#FFFBF4",
@@ -478,7 +481,7 @@ def pantalla_dibujar():
             st.button(" ", key=f"crayon_{nombre}", on_click=lambda n=nombre: s.update(crayon=n))
     st.markdown(f"<style>.st-key-crayon_{s.crayon} button {{ outline: 3px solid #2F5FA8; outline-offset: 3px; }}</style>",
                 unsafe_allow_html=True)
-    st.markdown('<p class="miga centro">Dibuja la palabra en el recuadro, rápido y sencillo, como en 20 segundos. Con los crayones cambias de color. Cuando termines, toca <b>Listo</b>.</p>', unsafe_allow_html=True)
+    st.markdown('<p class="miga centro">Dibuja la palabra en el recuadro, rápido y sencillo, como en 20 segundos. ¿No la conoces? Toca <b>Pista</b>. Cuando termines, toca <b>Listo</b>.</p>', unsafe_allow_html=True)
 
     _, c1, c2, _ = st.columns([1, 2, 2, 1])
     listo = c1.button("Listo", type="primary", use_container_width=True)
@@ -509,8 +512,8 @@ def pantalla_resultado():
     centrado(pose, 250)
     t = r["top"]
     texto = {"bien": f"¡Sí! Dibujaste <b>{t}</b> ({PALABRAS[t]}).",
-             "casi": f"¡Casi! A mí me parece: <b>{t}</b> ({PALABRAS[t]}).",
-             "duda": "Mmm… no estoy segura de qué es. ¿Lo intentas otra vez?"}[r["tipo"]]
+             "casi": f"¡Casi! A mí me parece: <b>{t}</b> ({PALABRAS[t]}).<br>La palabra era <b>{palabra}</b> ({PALABRAS[palabra]}).",
+             "duda": f"Mmm… no estoy segura de qué es.<br>La palabra era <b>{palabra}</b> ({PALABRAS[palabra]})."}[r["tipo"]]
     st.markdown(f'<div class="globo {r["tipo"]}">{texto}</div>', unsafe_allow_html=True)
     st.markdown('<p class="miga centro">La IA no sabe qué palabra te tocó: solo mira tu dibujo y adivina.</p>',
                 unsafe_allow_html=True)
