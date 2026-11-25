@@ -425,26 +425,75 @@ def pantalla_temas():
 
 
 # ---------------------------------------------------------------- 3. dibujar
-def boton_escuchar(palabra, traduccion):
-    # Usa la voz del propio navegador (speechSynthesis): no necesita archivos de audio.
+PISTAS = {
+    "apple": "Fruta roja o verde que se come con cáscara.",
+    "pear": "Fruta verde, más ancha abajo que arriba.",
+    "banana": "Fruta amarilla y alargada que se pela.",
+    "strawberry": "Fruta roja y pequeña con semillitas por fuera.",
+    "watermelon": "Fruta grande, verde por fuera y roja por dentro.",
+    "grapes": "Frutas pequeñas que vienen en racimo.",
+    "ice cream": "Postre frío que se come en cono.",
+    "pizza": "Comida redonda que se corta en triángulos.",
+    "cat": "Animal que maúlla y tiene bigotes.",
+    "dog": "Animal que ladra y mueve la cola.",
+    "rabbit": "Animal de orejas largas que salta.",
+    "bird": "Animal con plumas y pico que vuela.",
+    "butterfly": "Insecto con alas de colores.",
+    "fish": "Animal que vive en el agua y tiene aletas.",
+    "snake": "Animal largo y sin patas que se arrastra.",
+    "cow": "Animal de la finca que da leche.",
+    "frog": "Animal verde que salta y croa.",
+    "elephant": "Animal muy grande con trompa.",
+    "house": "Lugar donde vive una familia.",
+    "umbrella": "La abres cuando llueve.",
+    "guitar": "Instrumento musical de seis cuerdas.",
+    "chair": "Mueble para sentarse.",
+    "cup": "Recipiente con oreja para tomar café o chocolate.",
+    "clock": "Marca las horas.",
+    "book": "Tiene páginas y se lee.",
+    "key": "Sirve para abrir una puerta.",
+    "tree": "Planta grande con tronco y hojas.",
+    "flower": "Parte de la planta, de colores y con olor.",
+    "sun": "Brilla en el cielo de día.",
+    "moon": "Brilla en el cielo de noche.",
+    "cloud": "Está en el cielo y puede traer lluvia.",
+    "rainbow": "Aparece en el cielo después de llover, con muchos colores.",
+    "mountain": "Terreno muy alto, mucho más que una loma.",
+    "car": "Vehículo de cuatro ruedas para pocas personas.",
+    "bicycle": "Vehículo de dos ruedas con pedales.",
+    "bus": "Vehículo grande que lleva a muchos pasajeros.",
+    "airplane": "Vehículo con alas que vuela.",
+    "sailboat": "Barco que se mueve con el viento.",
+    "train": "Vehículo largo que va sobre rieles.",
+    "truck": "Vehículo grande que carga mercancía.",
+}
+
+
+def botones_palabra(palabra):
+    # Escuchar usa la voz del navegador (speechSynthesis). La pista aparece sin recargar la pantalla.
     import json as _json
     import streamlit.components.v1 as components
     components.html(f"""
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
-      body {{ margin: 0; display: flex; justify-content: center; gap: 10px; background: transparent; }}
+      body {{ margin: 0; background: transparent; text-align: center; }}
+      .fila {{ display: flex; justify-content: center; gap: 10px; }}
       button {{ font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 15px; color: #2F5FA8;
                background: #FFFBF4; border: 1.5px solid #2F5FA8; border-radius: 999px; padding: 8px 18px;
                display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }}
       button:active {{ background: #EAF1FB; }}
+      #texto {{ font-family: 'Patrick Hand', cursive; font-size: 18px; color: #6B5D4C; margin: 8px 12px 0; line-height: 1.25; }}
     </style>
-    <button id="b" type="button" aria-label="Escuchar la palabra en inglés">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F5FA8" stroke-width="2.2"
-           stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/>
-           <path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg>
-      Escuchar
-    </button>
-    <button id="p" type="button" aria-label="Ver la traducción">Pista</button>
+    <div class="fila">
+      <button id="b" type="button" aria-label="Escuchar la palabra en inglés">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F5FA8" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/>
+             <path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg>
+        Escuchar
+      </button>
+      <button id="p" type="button">Pista</button>
+    </div>
+    <p id="texto">¿No sabes qué es? Pide una pista.</p>
     <script>
       const palabra = {_json.dumps(palabra)};
       document.getElementById("b").onclick = () => {{
@@ -457,9 +506,11 @@ def boton_escuchar(palabra, traduccion):
         if (voz) u.voice = voz;
         v.speak(u);
       }};
-      const traduccion = {_json.dumps(traduccion)};
-      document.getElementById("p").onclick = (e) => {{ e.currentTarget.textContent = "Pista: " + traduccion; }};
-    </script>""", height=48)
+      const pista = {_json.dumps(PISTAS.get(palabra, ""))};
+      document.getElementById("p").onclick = () => {{
+        document.getElementById("texto").textContent = "Pista: " + pista;
+      }};
+    </script>""", height=100)
 
 
 def pantalla_dibujar():
@@ -470,7 +521,7 @@ def pantalla_dibujar():
 
     st.markdown(f"""<div class="tarjeta"><p class="pide">Draw:</p><p class="palabra">{palabra}</p>
                 </div>""", unsafe_allow_html=True)
-    boton_escuchar(palabra, PALABRAS[palabra])
+    botones_palabra(palabra)
 
     with st.container(key=f"lienzo_{s.lienzo}"):
         lienzo = st_canvas(stroke_width=6, stroke_color=CRAYONES[s.crayon], background_color="#FFFBF4",
@@ -481,7 +532,7 @@ def pantalla_dibujar():
             st.button(" ", key=f"crayon_{nombre}", on_click=lambda n=nombre: s.update(crayon=n))
     st.markdown(f"<style>.st-key-crayon_{s.crayon} button {{ outline: 3px solid #2F5FA8; outline-offset: 3px; }}</style>",
                 unsafe_allow_html=True)
-    st.markdown('<p class="miga centro">Dibuja la palabra en el recuadro, rápido y sencillo, como en 20 segundos. ¿No la conoces? Toca <b>Pista</b>. Cuando termines, toca <b>Listo</b>.</p>', unsafe_allow_html=True)
+    st.markdown('<p class="miga centro">Dibuja la palabra en el recuadro, rápido y sencillo, como en 20 segundos. Cuando termines, toca <b>Listo</b>.</p>', unsafe_allow_html=True)
 
     _, c1, c2, _ = st.columns([1, 2, 2, 1])
     listo = c1.button("Listo", type="primary", use_container_width=True)
